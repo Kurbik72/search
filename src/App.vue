@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from 'vue'
 
 const inputValue = ref('')
 const items = ref([])
+const filteredItems = ref([])
 
 onMounted(async () => {
   const res = await getProducts()
@@ -11,17 +12,16 @@ onMounted(async () => {
 })
 watch(inputValue, (newVal) => {
   if (!items.value.length) return
-  const sortedList = items.value.filter((item) =>
+  filteredItems.value = items.value.filter((item) =>
     item.name.toLowerCase().includes(newVal.toLowerCase()),
   )
-  console.log(sortedList)
 })
 </script>
 
 <template>
   <el-input v-model="inputValue" style="width: 240px" placeholder="Please search your products" />
   <el-descriptions>
-    <el-descriptions-item v-for="item in items" :key="item.id">
+    <el-descriptions-item v-for="item in filteredItems" :key="item.id">
       {{ item.name }}
     </el-descriptions-item>
   </el-descriptions>
